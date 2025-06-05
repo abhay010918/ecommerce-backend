@@ -1,5 +1,6 @@
 package com.ecommerce.backend.entity;
 
+import com.ecommerce.backend.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,7 +25,7 @@ public class Order {
     private Double totalPrice;
 
     @Enumerated(EnumType.STRING)
-    private String status;
+    private OrderStatus status;
 
     private String shippingAddress;
 

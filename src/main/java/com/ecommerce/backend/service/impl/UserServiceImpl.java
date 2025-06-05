@@ -1,30 +1,57 @@
 package com.ecommerce.backend.service.impl;
 
 import com.ecommerce.backend.dto.UserDTO;
+import com.ecommerce.backend.dto.UserLoginDTO;
 import com.ecommerce.backend.entity.User;
 import com.ecommerce.backend.exception.ResourceNotFoundException;
 import com.ecommerce.backend.repository.UserRepository;
 import com.ecommerce.backend.service.UserService;
+import com.ecommerce.backend.util.JwtUtil;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
-    public UserDTO createUser(UserDTO userDTO) {
+    public UserDTO registerUser(UserDTO userDTO) {
+        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+
         User user = mapToEntity(userDTO);
-        User savedUser = userRepository.save(user);
-        return mapToDTO(savedUser);
+        User save = userRepository.save(user);
+        return mapToDTO(save);
+    }
+
+    @Override
+    public String loginUser(UserLoginDTO userLoginDTO) {
+
+        Optional<User> byEmail = userRepository.findByEmail(userLoginDTO.getEmail());
+
+        if(byEmail.isPresent()){
+            User user = byEmail.get();
+            if(BCrypt.checkpw(userLoginDTO.getPassword(), user.getPassword())){
+                return jwtUtil.generateToken(user);
+            }else {
+                return "invalid user";
+            }
+        }
+        return "User no found";
     }
 
     @Override

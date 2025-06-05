@@ -3,6 +3,7 @@ package com.ecommerce.backend.service.impl;
 import com.ecommerce.backend.dto.OrderDTO;
 import com.ecommerce.backend.entity.Order;
 import com.ecommerce.backend.entity.User;
+import com.ecommerce.backend.enums.OrderStatus;
 import com.ecommerce.backend.exception.ResourceNotFoundException;
 import com.ecommerce.backend.repository.OrderRepository;
 import com.ecommerce.backend.repository.UserRepository;
@@ -32,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setUser(user);
         order.setTotalPrice(orderDTO.getTotalAmount());
-        order.setStatus("PLACED");
+        order.setStatus(OrderStatus.valueOf("PLACED"));
         order.setOrderDate(orderDTO.getCreatedAt());
         // Add more fields as needed
 
@@ -70,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDTO updateOrderStatus(Long id, String status) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found:"));
-        order.setStatus(status);
+        order.setStatus(OrderStatus.valueOf(status));
         Order save = orderRepository.save(order);
         return mapToDTO(save);
     }
@@ -81,7 +82,7 @@ public class OrderServiceImpl implements OrderService {
         dto.setUserId(order.getUser().getId());
         dto.setCreatedAt(order.getOrderDate());
         dto.setTotalAmount(order.getTotalPrice());
-        dto.setStatus(order.getStatus());
+        dto.setStatus(OrderStatus.valueOf(String.valueOf(order.getStatus())));
         return dto;
     }
 }

@@ -81,6 +81,8 @@ public class ProductServiceImpl implements ProductService {
         dto.setName(product.getName());
         dto.setDescription(product.getDescription());
         dto.setPrice(product.getPrice());
+        dto.setStock(product.getStock());
+        dto.setCategoryId(product.getCategory());
         //dto.setCategory(product.getCategory());
         return dto;
     }
@@ -91,6 +93,8 @@ public class ProductServiceImpl implements ProductService {
         product.setName(dto.getName());
         product.setDescription(dto.getDescription());
         product.setPrice(dto.getPrice());
+        product.setStock(dto.getStock());
+        product.setCategory(dto.getCategoryId());
         //product.setCategory(dto.getCategory());
         return product;
     }

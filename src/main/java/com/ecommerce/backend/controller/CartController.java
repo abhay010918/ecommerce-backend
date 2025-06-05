@@ -22,7 +22,7 @@ public class CartController {
         return ResponseEntity.ok(cartService.getCartByUserId(userId));
     }
 
-    @PostMapping("/{userId}/add")
+    @PostMapping("/{userId}/{productId}/add")
     public ResponseEntity<CartDTO> addItemToCart(
             @PathVariable Long userId,
             @RequestParam Long productId,
