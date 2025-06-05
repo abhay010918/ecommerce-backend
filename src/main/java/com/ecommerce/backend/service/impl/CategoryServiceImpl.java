@@ -1,5 +1,6 @@
 package com.ecommerce.backend.service.impl;
 
+import com.ecommerce.backend.dto.CategoryDTO;
 import com.ecommerce.backend.entity.Category;
 import com.ecommerce.backend.exception.ResourceNotFoundException;
 import com.ecommerce.backend.repository.CategoryRepository;
@@ -7,6 +8,7 @@ import com.ecommerce.backend.service.CategoryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -18,31 +20,58 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category createCategory(Category category) {
-        return categoryRepository.save(category);
+    public CategoryDTO createCategory(CategoryDTO categoryDTO) {
+        Category category = mapToEntity(categoryDTO);
+        Category saved = categoryRepository.save(category);
+        return mapToDTO(saved);
     }
 
     @Override
-    public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+    public CategoryDTO getCategoryById(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + id));
+        return mapToDTO(category);
     }
 
     @Override
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public List<CategoryDTO> getAllCategories() {
+        List<Category> categories = categoryRepository.findAll();
+        return categories.stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Category updateCategory(Long id, Category updatedCategory) {
-        Category existing = getCategoryById(id);
-        existing.setName(updatedCategory.getName());
-        return categoryRepository.save(existing);
+    public CategoryDTO updateCategory(Long id, CategoryDTO updatedCategoryDTO) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + id));
+
+        category.setName(updatedCategoryDTO.getName());
+
+        Category updated = categoryRepository.save(category);
+        return mapToDTO(updated);
     }
 
     @Override
     public void deleteCategory(Long id) {
-        Category category = getCategoryById(id);
-        categoryRepository.delete(category);
+        if (!categoryRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Category not found with ID: " + id);
+        }
+        categoryRepository.deleteById(id);
+    }
+
+    // Mapper methods
+    private CategoryDTO mapToDTO(Category category) {
+        CategoryDTO dto = new CategoryDTO();
+        dto.setId(category.getId());
+        dto.setName(category.getName());
+        return dto;
+    }
+
+    private Category mapToEntity(CategoryDTO dto) {
+        Category category = new Category();
+        category.setId(dto.getId());
+        category.setName(dto.getName());
+        return category;
     }
 }

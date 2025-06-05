@@ -1,6 +1,6 @@
 package com.ecommerce.backend.entity;
 
-import com.ecommerce.backend.enums.Role;
+import com.ecommerce.backend.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,7 +28,7 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private UserRole role;
 
     private LocalDateTime createdAt;
 

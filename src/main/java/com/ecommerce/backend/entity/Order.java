@@ -24,7 +24,7 @@ public class Order {
     private Double totalPrice;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private String status;
 
     private String shippingAddress;
 
@@ -38,10 +38,5 @@ public class Order {
     @PrePersist
     public void onCreate() {
         this.orderDate = LocalDateTime.now();
-        this.status = Status.PENDING;
-    }
-
-    public enum Status {
-        PENDING, PAID, SHIPPED, CANCELLED
     }
 }

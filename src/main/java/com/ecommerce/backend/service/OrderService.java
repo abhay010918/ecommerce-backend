@@ -1,11 +1,14 @@
 package com.ecommerce.backend.service;
 
-import com.ecommerce.backend.entity.Order;
+import com.ecommerce.backend.dto.OrderDTO;
+
 import java.util.List;
 
 public interface OrderService {
-    Order placeOrder(Long userId, Order order);
-    Order getOrderById(Long id);
-    List<Order> getOrdersByUserId(Long userId);
+    OrderDTO placeOrder(Long userId, OrderDTO orderDTO);
+    OrderDTO getOrderById(Long id);
+    List<OrderDTO> getOrdersByUserId(Long userId);
     void cancelOrder(Long id);
+    List<OrderDTO> getAllOrders();
+    OrderDTO updateOrderStatus(Long id, String status);
 }

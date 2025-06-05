@@ -1,11 +1,12 @@
 package com.ecommerce.backend.service;
 
-import com.ecommerce.backend.entity.User;
+import com.ecommerce.backend.dto.UserDTO;
+
 import java.util.List;
 
 public interface UserService {
-    User createUser(User user);
-    User getUserById(Long id);
-    List<User> getAllUsers();
+    UserDTO createUser(UserDTO userDTO);
+    UserDTO getUserById(Long id);
+    List<UserDTO> getAllUsers();
     void deleteUser(Long id);
 }

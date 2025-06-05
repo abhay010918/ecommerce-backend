@@ -1,10 +1,11 @@
 package com.ecommerce.backend.service;
 
-import com.ecommerce.backend.entity.Cart;
+import com.ecommerce.backend.dto.CartDTO;
 
 public interface CartService {
-    Cart getCartByUserId(Long userId);
-    Cart addItemToCart(Long userId, Long productId, int quantity);
-    Cart removeItemFromCart(Long userId, Long productId);
+    CartDTO getCartByUserId(Long userId);
+    CartDTO addItemToCart(Long userId, Long productId, int quantity);
+    CartDTO removeItemFromCart(Long userId, Long productId);
     void clearCart(Long userId);
+    CartDTO updateItemQuantity(Long userId, Long productId, int quantity);
 }

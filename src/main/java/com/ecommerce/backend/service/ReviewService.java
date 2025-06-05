@@ -1,10 +1,11 @@
 package com.ecommerce.backend.service;
 
-import com.ecommerce.backend.entity.Review;
+import com.ecommerce.backend.dto.ReviewDTO;
+
 import java.util.List;
 
 public interface ReviewService {
-    Review addReview(Long userId, Long productId, Review review);
-    List<Review> getReviewsForProduct(Long productId);
+    ReviewDTO addReview(Long userId, Long productId, ReviewDTO reviewDTO);
+    List<ReviewDTO> getReviewsForProduct(Long productId);
     void deleteReview(Long reviewId);
 }

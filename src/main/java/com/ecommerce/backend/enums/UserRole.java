@@ -1,6 +1,6 @@
 package com.ecommerce.backend.enums;
 
-public enum Role {
+public enum UserRole {
     CUSTOMER,
     ADMIN
 }

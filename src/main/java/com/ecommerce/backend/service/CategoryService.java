@@ -1,12 +1,13 @@
 package com.ecommerce.backend.service;
 
-import com.ecommerce.backend.entity.Category;
+import com.ecommerce.backend.dto.CategoryDTO;
+
 import java.util.List;
 
 public interface CategoryService {
-    Category createCategory(Category category);
-    Category getCategoryById(Long id);
-    List<Category> getAllCategories();
-    Category updateCategory(Long id, Category category);
+    CategoryDTO createCategory(CategoryDTO categoryDTO);
+    CategoryDTO getCategoryById(Long id);
+    List<CategoryDTO> getAllCategories();
+    CategoryDTO updateCategory(Long id, CategoryDTO categoryDTO);
     void deleteCategory(Long id);
 }

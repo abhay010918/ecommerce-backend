@@ -1,5 +1,6 @@
 package com.ecommerce.backend.service.impl;
 
+import com.ecommerce.backend.dto.ProductDTO;
 import com.ecommerce.backend.entity.Product;
 import com.ecommerce.backend.exception.ResourceNotFoundException;
 import com.ecommerce.backend.repository.ProductRepository;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -20,34 +22,76 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product createProduct(Product product) {
-        return productRepository.save(product);
+    public ProductDTO createProduct(ProductDTO productDTO) {
+        Product product = mapToEntity(productDTO);
+        Product saved = productRepository.save(product);
+        return mapToDTO(saved);
     }
 
     @Override
-    public Product getProductById(Long id) {
-        return productRepository.findById(id)
+    public ProductDTO getProductById(Long id) {
+        Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+        return mapToDTO(product);
     }
 
     @Override
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<ProductDTO> getAllProducts() {
+        List<Product> products = productRepository.findAll();
+        return products.stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Product updateProduct(Long id, Product updatedProduct) {
-        Product existing = getProductById(id);
-        existing.setName(updatedProduct.getName());
-        existing.setDescription(updatedProduct.getDescription());
-        existing.setPrice(updatedProduct.getPrice());
-//        existing.setQuantity(updatedProduct.getQuantity());
-        existing.setCategory(updatedProduct.getCategory());
-        return productRepository.save(existing);
+    public ProductDTO updateProduct(Long id, ProductDTO updatedProductDTO) {
+        Product existing = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+
+        existing.setName(updatedProductDTO.getName());
+        existing.setDescription(updatedProductDTO.getDescription());
+        existing.setPrice(updatedProductDTO.getPrice());
+        //existing.setCategory(updatedProductDTO.getCategory());
+        // existing.setQuantity(updatedProductDTO.getQuantity()); // Uncomment if needed
+
+        Product updated = productRepository.save(existing);
+        return mapToDTO(updated);
     }
 
     @Override
     public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Product not found with id: " + id);
+        }
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public List<ProductDTO> getProductsByCategory(Long categoryId) {
+        List<Product> products = productRepository.findByCategoryId(categoryId);
+        return products.stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+    // Mapping methods
+    private ProductDTO mapToDTO(Product product) {
+        ProductDTO dto = new ProductDTO();
+        dto.setId(product.getId());
+        dto.setName(product.getName());
+        dto.setDescription(product.getDescription());
+        dto.setPrice(product.getPrice());
+        //dto.setCategory(product.getCategory());
+        return dto;
+    }
+
+    private Product mapToEntity(ProductDTO dto) {
+        Product product = new Product();
+        product.setId(dto.getId());
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        //product.setCategory(dto.getCategory());
+        return product;
     }
 }
