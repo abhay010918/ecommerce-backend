@@ -39,10 +39,10 @@ public class SecurityConfig {
                                 ,"/actuator/**"
                         ).permitAll()
 
-//                        // ADMIN-only endpoints
-//                        .requestMatchers(""
-//
-//                        ).hasRole("ADMIN")
+                        // ADMIN-only endpoints
+                        .requestMatchers(
+                                "/api/files/**"
+                        ).hasRole("ADMIN")
 //
 //                        // ADMIN + COSTUMER endpoints
 //                        .requestMatchers(""

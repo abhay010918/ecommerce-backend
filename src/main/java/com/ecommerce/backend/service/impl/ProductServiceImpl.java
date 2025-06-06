@@ -5,9 +5,12 @@ import com.ecommerce.backend.entity.Product;
 import com.ecommerce.backend.exception.ResourceNotFoundException;
 import com.ecommerce.backend.repository.ProductRepository;
 import com.ecommerce.backend.service.ProductService;
+import com.ecommerce.backend.service.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,10 +18,12 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final S3Service s3Service;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, S3Service s3Service) {
         this.productRepository = productRepository;
+        this.s3Service = s3Service;
     }
 
     @Override
@@ -72,6 +77,21 @@ public class ProductServiceImpl implements ProductService {
         return products.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String uploadProductImage(Long productId, MultipartFile file) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found by id:" + productId));
+
+        try {
+            String fileUrl = s3Service.uploadFile(file);
+            product.setImageUrl(fileUrl);
+            productRepository.save(product);
+        } catch (IOException e) {
+            throw new RuntimeException("Image upload failed" + e.getMessage());
+        }
+        return "Product is not available";
     }
 
     // Mapping methods
