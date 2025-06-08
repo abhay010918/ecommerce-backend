@@ -1,7 +1,6 @@
 package com.ecommerce.backend.controller;
 
 import com.ecommerce.backend.dto.ProductDTO;
-import com.ecommerce.backend.entity.Product;
 import com.ecommerce.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +61,26 @@ public class ProductController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Image upload failed: " + e.getMessage());
         }
+    }
+
+    // for the product searching by name and category
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductDTO>> searchProducts(
+            @RequestParam String name,
+            @RequestParam String category
+    ){
+        if(name != null){
+            return
+                    ResponseEntity.ok(
+                            productService.searchByName(name)
+                    );
+        } else if (category != null) {
+            ResponseEntity.ok(
+                    productService.searchByCategory(category)
+            );
+        }
+        return ResponseEntity.badRequest().build();
     }
 
 }

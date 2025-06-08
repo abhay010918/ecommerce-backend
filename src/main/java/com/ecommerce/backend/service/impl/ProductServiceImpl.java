@@ -94,6 +94,22 @@ public class ProductServiceImpl implements ProductService {
         return "Product is not available";
     }
 
+    @Override
+    public List<ProductDTO> searchByName(String name) {
+        return productRepository.findByCategoryNameIgnoreCase(name)
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductDTO> searchByCategory(String category) {
+        return productRepository.findByCategoryNameIgnoreCase(category)
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
+    }
+
     // Mapping methods
     private ProductDTO mapToDTO(Product product) {
         ProductDTO dto = new ProductDTO();

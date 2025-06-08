@@ -36,6 +36,7 @@ public class SecurityConfig {
                                 ,"/api/users/register"
                                 ,"/api/otp/**"
                                 ,"/actuator/**"
+                                ,"api/invoice/**"
                         ).permitAll()
 
                         // ADMIN-only endpoints

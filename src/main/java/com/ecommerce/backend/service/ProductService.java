@@ -13,4 +13,6 @@ public interface ProductService {
     void deleteProduct(Long id);
     List<ProductDTO> getProductsByCategory(Long categoryId);
     String uploadProductImage(Long productId, MultipartFile file);
+    List<ProductDTO> searchByName(String name);
+    List<ProductDTO> searchByCategory(String category);
 }
