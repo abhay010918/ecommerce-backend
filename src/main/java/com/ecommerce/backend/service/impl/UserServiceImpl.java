@@ -83,6 +83,7 @@ public class UserServiceImpl implements UserService {
         dto.setId(user.getId());
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
+        dto.setPhoneNumber(user.getPhoneNumber());
         dto.setPassword(user.getPassword());
         dto.setRole(user.getRole());
         // Add more fields as needed
@@ -94,6 +95,7 @@ public class UserServiceImpl implements UserService {
         user.setId(dto.getId());
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
+        user.setPhoneNumber(dto.getPhoneNumber());
         user.setPassword(dto.getPassword());
         user.setRole(dto.getRole());
         // Add more fields as needed
