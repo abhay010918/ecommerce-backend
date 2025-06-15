@@ -2,7 +2,7 @@ package com.ecommerce.backend.controller;
 
 import com.ecommerce.backend.entity.User;
 import com.ecommerce.backend.repository.UserRepository;
-import com.ecommerce.backend.service.OtpService;
+import com.ecommerce.backend.service.services.OtpService;
 import com.ecommerce.backend.util.JwtUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

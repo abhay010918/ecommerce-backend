@@ -9,7 +9,7 @@ import com.ecommerce.backend.entity.User;
 import com.ecommerce.backend.repository.CartRepository;
 import com.ecommerce.backend.repository.ProductRepository;
 import com.ecommerce.backend.repository.UserRepository;
-import com.ecommerce.backend.service.CartService;
+import com.ecommerce.backend.service.services.CartService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

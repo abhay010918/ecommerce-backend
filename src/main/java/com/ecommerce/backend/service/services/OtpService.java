@@ -1,4 +1,4 @@
-package com.ecommerce.backend.service;
+package com.ecommerce.backend.service.services;
 
 import com.ecommerce.backend.entity.Otp;
 import com.ecommerce.backend.repository.OtpRepository;

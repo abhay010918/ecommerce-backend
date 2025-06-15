@@ -2,12 +2,14 @@ package com.ecommerce.backend.service.impl;
 
 import com.ecommerce.backend.dto.OrderDTO;
 import com.ecommerce.backend.entity.Order;
+import com.ecommerce.backend.entity.Product;
 import com.ecommerce.backend.entity.User;
 import com.ecommerce.backend.enums.OrderStatus;
 import com.ecommerce.backend.exception.ResourceNotFoundException;
 import com.ecommerce.backend.repository.OrderRepository;
+import com.ecommerce.backend.repository.ProductRepository;
 import com.ecommerce.backend.repository.UserRepository;
-import com.ecommerce.backend.service.OrderService;
+import com.ecommerce.backend.service.services.OrderService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,17 +20,26 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
 
 
-    public OrderServiceImpl(OrderRepository orderRepository, UserRepository userRepository) {
+
+    public OrderServiceImpl(OrderRepository orderRepository,
+                            UserRepository userRepository,
+                            ProductRepository productRepository) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
+        this.productRepository = productRepository;
     }
 
     @Override
     public OrderDTO placeOrder(Long userId, OrderDTO orderDTO) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: " + userId));
+
+
+        Product product = productRepository.findById(orderDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
         Order order = new Order();
         order.setUser(user);
@@ -39,6 +50,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order savedOrder = orderRepository.save(order);
         return mapToDTO(savedOrder);
+
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.ecommerce.backend.controller;
 import com.ecommerce.backend.dto.TokenDto;
 import com.ecommerce.backend.dto.UserDTO;
 import com.ecommerce.backend.dto.UserLoginDTO;
-import com.ecommerce.backend.service.UserService;
+import com.ecommerce.backend.service.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

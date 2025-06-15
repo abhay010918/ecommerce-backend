@@ -4,7 +4,7 @@ import com.ecommerce.backend.dto.CategoryDTO;
 import com.ecommerce.backend.entity.Category;
 import com.ecommerce.backend.exception.ResourceNotFoundException;
 import com.ecommerce.backend.repository.CategoryRepository;
-import com.ecommerce.backend.service.CategoryService;
+import com.ecommerce.backend.service.services.CategoryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

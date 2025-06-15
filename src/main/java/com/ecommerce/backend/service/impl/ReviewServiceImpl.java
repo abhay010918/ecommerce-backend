@@ -8,7 +8,7 @@ import com.ecommerce.backend.exception.ResourceNotFoundException;
 import com.ecommerce.backend.repository.ProductRepository;
 import com.ecommerce.backend.repository.ReviewRepository;
 import com.ecommerce.backend.repository.UserRepository;
-import com.ecommerce.backend.service.ReviewService;
+import com.ecommerce.backend.service.services.ReviewService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

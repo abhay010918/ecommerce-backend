@@ -1,6 +1,6 @@
 package com.ecommerce.backend.controller;
 import com.ecommerce.backend.dto.OrderDTO;
-import com.ecommerce.backend.service.OrderService;
+import com.ecommerce.backend.service.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

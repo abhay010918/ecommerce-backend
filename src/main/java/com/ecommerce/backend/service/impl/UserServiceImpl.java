@@ -5,7 +5,7 @@ import com.ecommerce.backend.dto.UserLoginDTO;
 import com.ecommerce.backend.entity.User;
 import com.ecommerce.backend.exception.ResourceNotFoundException;
 import com.ecommerce.backend.repository.UserRepository;
-import com.ecommerce.backend.service.UserService;
+import com.ecommerce.backend.service.services.UserService;
 import com.ecommerce.backend.util.JwtUtil;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;

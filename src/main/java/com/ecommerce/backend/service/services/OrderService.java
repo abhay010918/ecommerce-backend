@@ -1,7 +1,6 @@
-package com.ecommerce.backend.service;
+package com.ecommerce.backend.service.services;
 
 import com.ecommerce.backend.dto.OrderDTO;
-import com.ecommerce.backend.enums.OrderStatus;
 
 import java.util.List;
 
