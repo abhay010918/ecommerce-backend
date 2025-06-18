@@ -1,6 +1,6 @@
-package com.ecommerce.backend.service.services;
+package com.ecommerce.backend.service.impl;
 
-import com.ecommerce.backend.service.impl.PaymentService;
+import com.ecommerce.backend.service.services.PaymentService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;

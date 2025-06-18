@@ -16,7 +16,7 @@ public class InvoiceService {
             File file = new File(outputPath);
             File parentDir = file.getParentFile();
             if(parentDir != null && !parentDir.exists()){
-                parentDir.mkdir();
+                parentDir.mkdirs();
             }
 
 

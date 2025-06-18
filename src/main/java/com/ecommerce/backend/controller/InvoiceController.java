@@ -1,12 +1,14 @@
 package com.ecommerce.backend.controller;
 
 import com.ecommerce.backend.service.services.InvoiceService;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -23,8 +25,9 @@ public class InvoiceController {
     @GetMapping("/generate")
     public ResponseEntity<String> generateInvoice() throws IOException {
 
-        String html = Files.readString(Path.of("src/main/resources/templates/invoice.html"));
+        Path path = new ClassPathResource("templates/invoice.html").getFile().toPath();
+        String html = Files.readString(path, StandardCharsets.UTF_8);
         invoiceService.generateInvoice(html, "invoice/invoice.pdf");
-        return ResponseEntity.ok("invoice generated successfully");
+        return ResponseEntity.ok("Invoice generated: invoice/invoice.pdf");
     }
 }

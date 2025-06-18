@@ -15,8 +15,10 @@ public class Otp {
     @Column(nullable = false)
     private Long id;
 
+    @Column(unique = true)
     private String phoneNumber;
 
+    @Column(unique = true)
     private String otp;
 
     private LocalDateTime createdAt;

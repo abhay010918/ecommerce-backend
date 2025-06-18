@@ -15,7 +15,6 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @Autowired
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
@@ -67,20 +66,16 @@ public class ProductController {
 
     @GetMapping("/search")
     public ResponseEntity<List<ProductDTO>> searchProducts(
-            @RequestParam String name,
-            @RequestParam String category
-    ){
-        if(name != null){
-            return
-                    ResponseEntity.ok(
-                            productService.searchByName(name)
-                    );
-        } else if (category != null) {
-            ResponseEntity.ok(
-                    productService.searchByCategory(category)
-            );
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String category
+    ) {
+        if (name != null && !name.isBlank()) {
+            return ResponseEntity.ok(productService.searchByName(name));
+        } else if (category != null && !category.isBlank()) {
+            return ResponseEntity.ok(productService.searchByCategory(category));
+        } else {
+            return ResponseEntity.badRequest().body(List.of()); // return empty list or handle as needed
         }
-        return ResponseEntity.badRequest().build();
     }
 
 }

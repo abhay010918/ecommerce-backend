@@ -44,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setUser(user);
         order.setTotalPrice(orderDTO.getTotalAmount());
-        order.setStatus(OrderStatus.valueOf("PLACED"));
+        order.setStatus(orderDTO.getStatus());
         order.setOrderDate(orderDTO.getCreatedAt());
         // Add more fields as needed
 

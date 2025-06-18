@@ -17,7 +17,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @Autowired
+
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -35,6 +35,7 @@ public class UserController {
             TokenDto tokenDto = new TokenDto();
             tokenDto.setToken(token);
             tokenDto.setType("JWT");
+
             return new ResponseEntity<>(tokenDto, HttpStatus.OK);
         }else {
             return new ResponseEntity<>("Invalid Username/Password", HttpStatus.NOT_FOUND);

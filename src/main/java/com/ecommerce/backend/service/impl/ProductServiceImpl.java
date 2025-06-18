@@ -1,8 +1,10 @@
 package com.ecommerce.backend.service.impl;
 
 import com.ecommerce.backend.dto.ProductDTO;
+import com.ecommerce.backend.entity.Category;
 import com.ecommerce.backend.entity.Product;
 import com.ecommerce.backend.exception.ResourceNotFoundException;
+import com.ecommerce.backend.repository.CategoryRepository;
 import com.ecommerce.backend.repository.ProductRepository;
 import com.ecommerce.backend.service.services.ProductService;
 import com.ecommerce.backend.service.services.S3Service;
@@ -19,11 +21,15 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final S3Service s3Service;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, S3Service s3Service) {
+    public ProductServiceImpl(ProductRepository productRepository,
+                              S3Service s3Service,
+                              CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.s3Service = s3Service;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -56,8 +62,13 @@ public class ProductServiceImpl implements ProductService {
         existing.setName(updatedProductDTO.getName());
         existing.setDescription(updatedProductDTO.getDescription());
         existing.setPrice(updatedProductDTO.getPrice());
-        //existing.setCategory(updatedProductDTO.getCategory());
-        // existing.setQuantity(updatedProductDTO.getQuantity()); // Uncomment if needed
+        existing.setStock(updatedProductDTO.getStock());
+
+        if (updatedProductDTO.getCategoryId() != null) {
+            Category category = categoryRepository.findById(updatedProductDTO.getCategoryId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + updatedProductDTO.getCategoryId()));
+            existing.setCategory(category);
+        }
 
         Product updated = productRepository.save(existing);
         return mapToDTO(updated);
@@ -88,15 +99,15 @@ public class ProductServiceImpl implements ProductService {
             String fileUrl = s3Service.uploadFile(file);
             product.setImageUrl(fileUrl);
             productRepository.save(product);
+            return fileUrl;
         } catch (IOException e) {
-            throw new RuntimeException("Image upload failed" + e.getMessage());
+            throw new RuntimeException("Image upload failed: " + e.getMessage());
         }
-        return "Product is not available";
     }
 
     @Override
     public List<ProductDTO> searchByName(String name) {
-        return productRepository.findByCategoryNameIgnoreCase(name)
+        return productRepository.findByNameContainingIgnoreCase(name)
                 .stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
@@ -107,10 +118,9 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findByCategoryNameIgnoreCase(category)
                 .stream()
                 .map(this::mapToDTO)
-                .toList();
+                .collect(Collectors.toList());
     }
 
-    // Mapping methods
     private ProductDTO mapToDTO(Product product) {
         ProductDTO dto = new ProductDTO();
         dto.setId(product.getId());
@@ -118,8 +128,8 @@ public class ProductServiceImpl implements ProductService {
         dto.setDescription(product.getDescription());
         dto.setPrice(product.getPrice());
         dto.setStock(product.getStock());
-        dto.setCategoryId(product.getCategory());
-        //dto.setCategory(product.getCategory());
+        dto.setImageUrl(product.getImageUrl());
+        dto.setCategoryId(product.getCategory() != null ? product.getCategory().getId() : null);
         return dto;
     }
 
@@ -130,8 +140,12 @@ public class ProductServiceImpl implements ProductService {
         product.setDescription(dto.getDescription());
         product.setPrice(dto.getPrice());
         product.setStock(dto.getStock());
-        product.setCategory(dto.getCategoryId());
-        //product.setCategory(dto.getCategory());
+        product.setImageUrl(dto.getImageUrl());
+        if (dto.getCategoryId() != null) {
+            Category category = categoryRepository.findById(dto.getCategoryId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + dto.getCategoryId()));
+            product.setCategory(category);
+        }
         return product;
     }
 }
